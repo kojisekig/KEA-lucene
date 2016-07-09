@@ -4,7 +4,7 @@
 
 文書に付加されたキーフレーズは、当該文書の意味的メタデータであり、文書の極端に短いサマリーとも言える。そのため、文書を読み込む時間がない場合にその文書のメタデータであるキーフレーズのリストをながめるだけでおおまかな内容をつかむことができる。たとえば限られた時間である調べ物をしていたとしよう。その調査に関係しそうな文書は目の前に山積みされているが、すべてに目を通している時間はない。そんなときは、文書に振られているキーフレーズをまずながめて、関係しそうな文書だけを選んで読み始めることができる。
 
-学術論文などではその論文の著者によってキーフレーズが付加されているものが多い。しかしながら一般の文書や書籍はキーフレーズがつけられていないものがほとんどである。KEAはそのような文書から自動的にキーフレーズを抽出しようというプログラムである。KEAは著者によりキーフレーズが付加された文書を読み込んでその特徴を学習し、キーフレーズがつけられていない未知の文書からキーフレーズを自動抽出しようという、教師あり機械学習プログラムである。KEAは言語（英語や日本語など）に関係なく動作可能なアルゴリズムとなっている。
+学術論文などではその論文の著者によってキーフレーズが付加されているものが多い。しかしながら一般の文書や書籍はキーフレーズがつけられていないものがほとんどである。KEAはそのような文書から自動的にキーフレーズを抽出しようというプログラムである。KEAは著者によりキーフレーズが付加された文書を読み込んでその特徴を学習し、キーフレーズがつけられていない未知の文書からキーフレーズを自動抽出するという、教師あり機械学習プログラムである。KEAは言語（英語や日本語など）に関係なく動作可能なアルゴリズムとなっている。
 
 ## キーフレーズ抽出と情報検索の関係
 
@@ -82,11 +82,11 @@ freq(P,D)は文書D中にフレーズPが出現する回数、size(D)は文書�
 
 ## なぜLuceneを使うのか？
 
-ところでKEAを実装するのになぜLuceneを使うのだろうか。KEAに限らず自然言語処理のツールを実装する場合、単語の数を数えたり、ある単語を含む文書の数を数えたり、それ以前に文書を単語に区切ったりすることがよく行われる。Luceneはこういった処理を行うのによく整備されたAPIを備えており、Luceneインデックスは単語辞書としても優れている。特にKEA-luceneのために使用したLucene APIを以下に紹介しよう。
+ところでKEAを実装するのになぜLuceneを使うのだろうか。KEAに限らず自然言語処理のツールを実装する場合、単語の数を数えたり、ある単語を含む文書の数を数えたり、それ以前に文書を単語に区切ったりすることがよく行われる。Luceneはこういった処理を行うのによく整備されたAPIを備えている。さらにはLuceneの転置インデックス（以下単にインデックスと呼ぶ）は単語辞書としても優秀だ。特にKEA-luceneのために使用したLucene APIを以下に紹介しよう。
 
 ### Analyzer
 
-Luceneでは、文章を単語に区切るのにAnalyzerクラスを用いる。KEA-luceneでは、トークナイズのためにStandardTokenizerを、小文字への正規化のためにLowerCaseFilterを、そして単語N-gramをサポートするためにShingleFilterを使っている。残念ながらKEAのストップワードの考え方はLuceneのStopFilterでは実現できないので、KEAStopFilterという独自TokenFilterを実装している。そして最終的に次のようにKEAAnalyzerを組み上げた。
+Luceneでは、文章を単語に区切るのに[Analyzer](https://lucene.apache.org/core/6_1_0/core/org/apache/lucene/analysis/Analyzer.html)クラスを用いる。KEA-luceneでは、トークナイズのために[StandardTokenizer](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/standard/StandardTokenizer.html)を、小文字への正規化のために[LowerCaseFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/core/LowerCaseFilter.html)を、そして単語N-gramをサポートするために[ShingleFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/shingle/ShingleFilter.html)を使っている。残念ながらKEAのストップワードの考え方はLuceneの[StopFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/core/StopFilter.html)では実現できないので、KEAStopFilterという独自[TokenFilter](https://lucene.apache.org/core/6_1_0/core/org/apache/lucene/analysis/TokenFilter.html)を実装している。そして最終的に次のようにKEAAnalyzerを組み上げた。
 
 ```java
 public class KEAAnalyzer extends Analyzer {
