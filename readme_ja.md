@@ -1,3 +1,5 @@
+本プロジェクトKEA-luceneは[KEA](http://www.nzdl.org/Kea/)を[Apache Lucene](https://lucene.apache.org/core/)上に実装したプログラムである。
+
 # KEA とは？
 
 [KEA](http://www.nzdl.org/Kea/)はニュージーランドのワイカト大学で開発されている、自然言語で書かれた文書からキーフレーズ（キーワード）を自動抽出するプログラムである。KEAはKeyphrase Extraction Algorithmの略であり、KEAプログラムを構成するアルゴリズムそのものを指す場合もある。
