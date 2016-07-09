@@ -251,26 +251,21 @@ public class KEAModelBuilder {
           while(de.nextDoc() != PostingsEnum.NO_MORE_DOCS){
             int docId = de.docID();
             int freq = de.freq();
-            PostingsEnum pe = MultiFields.getTermPositionsEnum(ir, fieldName, rawPhrase);
-            int ret = pe.advance(docId);
-            if(ret == PostingsEnum.NO_MORE_DOCS){
-              System.out.printf("(NO_MORE_DOCS) %d\n", docId);
-            }
-            else{
-              /*
-              System.out.printf("%d(%d;", docId, de.freq());
-              for(int i = 0; i < freq; i++){
-                int pos = pe.nextPosition();
-                System.out.printf(" %d", pos);
+            // Let's consider only terms that occurs more than one time in the document
+            // KEA papers said "To reduce the size of the training set, we discard any phrase that occurs only once in the document."
+            if(freq > 1){
+              PostingsEnum pe = MultiFields.getTermPositionsEnum(ir, fieldName, rawPhrase);
+              int ret = pe.advance(docId);
+              if(ret == PostingsEnum.NO_MORE_DOCS){
+                System.out.printf("(NO_MORE_DOCS) %d\n", docId);
               }
-              System.out.print("), ");
-              */
-              // get first position of the term in the doc (first occurrence)
-              int pos = pe.nextPosition();
-              model.add(docId, fieldName, phrase, freq, pos);
+              else{
+                // get first position of the term in the doc (first occurrence)
+                int pos = pe.nextPosition();
+                model.add(docId, fieldName, phrase, freq, pos);
+              }
             }
           }
-          //System.out.println();   // CRLF
         }
       }
     }
@@ -355,7 +350,7 @@ public class KEAModelBuilder {
           KEADocModel docModel = dm.get(file);
           for(String keyphrase: docModel.ps.keySet()){
             PhraseStats ps = docModel.ps.get(keyphrase);
-            if(!ps.discard()){
+            if(!ps.discard()){ // not need this if statement because phrases that occur only once in the document have already been discarded
               boolean class1 = knowKeyphraseSet.contains(keyphrase);
               pw.printf("%s = %d %g %g\n", keyphrase, class1 ? 1 : 0, ps.tfidf, ps.firstOccurrence);
               pwf.printf("%g %g %s\n", ps.tfidf, ps.firstOccurrence, class1);
