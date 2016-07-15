@@ -379,7 +379,7 @@ When I wrote this article, I did not implement the following items in the first 
 
 * Stemming. Should be able to use tools including Lucene Porter Stemmer.
 * MDLP. R is used as described in the article. Like to be able to create an original or use non-GPL license implementation because the MDLP implement of R is GPL
-* Try against non-Japanese data including text in English. Supervised data and tweak around stop words would be necessary.
+* Try against non-English text data such ad Japanese. Supervised data and tweak around stop words for the particular language would be necessary.
 * Additional feature value. In addition to the above-mentioned feature values, the most recent KEA implement seems to have feature values that are not mentioned in the paper.
 
 We have been working on hard-coding around KEA-lucene and are planning to provide general purpose codes via [NLP4L](https://github.com/NLP4L) as appropriate.
