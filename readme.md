@@ -75,7 +75,7 @@ To extract key phrases from unknown document D, derive P[yes] and P[no] by calcu
 
 > score(P,D) = P[yes] / (P[yes] + P[no])
 
-Note that you need to add 1 to df(P) and N when calculating TF*IDF because unknown document is not included in the model.
+Note that you need to add 1 to df(P) and N when calculating TF*IDF for unknown documents because those documents are not included in the model.
 
 
 # A KEA Program using Apache Lucene
@@ -84,7 +84,7 @@ Let's make full use of Lucene library to write a KEA program ("KEA-lucene" herei
 
 ## Why Lucene?
 
-Now, you might think why you use Lucene to implement KEA. Not only KEA, when you implement a natural language processing tool, you often count the number of words or documents that include a certain word, or separate a document into words. Lucene provides well-suited APIs to execute those processes. In addition, the transpose index (simply "index" hereinafter) is excellent feature as a word dictionary as well. The following is Lucene API that I specifically used for KEA-lucene.
+Now, you might think why you use Lucene to implement KEA. Not only KEA, when you implement a natural language processing tool, you often count the number of words or documents that include a certain word, or tokenize a document into words. Lucene provides well-suited APIs to execute those processes. In addition, the inverted index (simply "index" hereinafter) is excellent feature as a word dictionary as well. The following is Lucene API that I specifically used for KEA-lucene.
 
 ### Analyzer
 
@@ -134,7 +134,7 @@ Furthermore, as KEA-lucene changes N of word N-gram from 1 to 3 and add index to
 
 ### Utilizing Lucene Index as a Word Dictionary
 
-Lucene creates transpose index that uses a word as a key. It would be natural and reasonable to use this as a word dictionary. Process as follows to scan words in a field called "field" all the way through. Note that ir is an object of IndexReader that opens Lucene index.
+Lucene creates inverted index that uses a word as a key. It would be natural and reasonable to use this as a word dictionary. Process as follows to scan words in a field called "field" all the way through. Note that ir is an object of IndexReader that opens Lucene index.
 
 
 ```java
