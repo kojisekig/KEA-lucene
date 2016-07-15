@@ -51,13 +51,13 @@ During key phrase candidate enumeration, phrases starting with stop word or endi
 
 KEA uses Naive Bayes classifier to learn how easy (P[yes]) or how difficult (P[no]) the data with labels (document data that has key phrases assigned by the author) of key phrase candidates will become key phrases. In particular, the following formula will be used.
 
-> P[yes] = Y / (Y + N) * Pt[t|yes] * Pd[d|yes] 
-> P[no] = N / (Y + N) * Pt[t|no] * Pd[d|no] 
+> P[yes] = Y / (Y + N) * Pt[t|yes] * Pd[d|yes]  
+> P[no] = N / (Y + N) * Pt[t|no] * Pd[d|no]
 
 Here, portions "Y / (Y + N)" and "N / (Y + N)" are prior probabilities determined by key phrase candidates. If the ones with asterisks are key phrases, then the prior probabilities would become as follows.
 
-> Y / (Y + N) = 2 / 10 
-> N / (Y + N) = 8 / 10 
+> Y / (Y + N) = 2 / 10  
+> N / (Y + N) = 8 / 10
 
 KEA uses 2 feature values to express phrase P in document D. The first is TF*IDF and is calculated as follows.
 
