@@ -18,11 +18,11 @@ What good things would happen to information retrieval if you could extract key 
 
 It also helps users easily select documents by displaying the key phrases of documents in place of or along side of the highlight function while displaying search results. In addition, being able to extract key phrases can be a big advantage as they can be keys for facet.
 
-## Processing Overview of KEA: 
-.......
+## Processing Overview of KEA
+
 You are encouraged to read through [KEA Paper](http://www.cs.waikato.ac.nz/~ml/publications/2005/chap_Witten-et-al_Windows.pdf) as it is not particularly hard to read. Here, I will give you a minimum explanation so that you can understand how to implement KEA using Lucene library that will be described later in this article.
 
-The processes of KEA are roughly divided into "Learning Process" and "Key Phrase Extraction Process" where the both include a common process called key phrase candidate listing. Those key phrase candidates will be mechanically listed. During the learning process, the process learns how easy (or how difficult) for a listed key phrase candidate to be a key phrase. Then, during the key phrase extraction, the process refers to the learned probability model to give scores to many key phrase candidates and display them from the highest score to the lowest. During the actual key phrase extraction process, the ranked key phrase candidates that have a score lower than a certain point will be cut off from the list.
+The processes of KEA are roughly divided into "Learning Process" and "Key Phrase Extraction Process" where the both include a common process called key phrase candidate listing. Those key phrase candidates will be mechanically listed. During the learning process, the process learns how easy (or how difficult) for a listed key phrase candidate to be a key phrase. Then, during the key phrase extraction, the process refers to the learned probabilistic model to give scores to many key phrase candidates and display them from the highest score to the lowest. During the actual key phrase extraction process, the ranked key phrase candidates that have a score lower than a certain point will be cut off from the list.
 
 The KEA implement explained in this article utilizes Lucene to a great degree. In the learning program, we will create a Lucene index that has known (with key phrases assigned by the author) document and create a model file from that. In a program that extracts key phrases from unknown document (without key phrases), the document has to be registered in a Lucene index before extracting key phrases from it.
 
@@ -49,15 +49,15 @@ During key phrase candidate enumeration, phrases starting with stop word or endi
 
 ### Model Learning in KEA
 
-KEA uses Naive Bayesclassifier to learn how easy (P[yes]) or how difficult (P[no]) the data with teacher (document data that has key phrases assigned by the author) of key phrase candidates will become key phrases. In particular, the following formula will be used.
+KEA uses Naive Bayes classifier to learn how easy (P[yes]) or how difficult (P[no]) the data with labels (document data that has key phrases assigned by the author) of key phrase candidates will become key phrases. In particular, the following formula will be used.
 
 > P[yes] = Y / (Y + N) * Pt[t|yes] * Pd[d|yes] 
-> P[no] = N / (Y + N) * Pt[t|no] * Pd[d|no]
+> P[no] = N / (Y + N) * Pt[t|no] * Pd[d|no] 
 
 Here, portions "Y / (Y + N)" and "N / (Y + N)" are prior probabilities determined by key phrase candidates. If the ones with asterisks are key phrases, then the prior probabilities would become as follows.
 
 > Y / (Y + N) = 2 / 10 
-> N / (Y + N) = 8 / 10
+> N / (Y + N) = 8 / 10 
 
 KEA uses 2 feature values to express phrase P in document D. The first is TF*IDF and is calculated as follows.
 
