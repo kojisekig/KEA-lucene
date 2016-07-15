@@ -6,15 +6,15 @@ This project, KEA-lucene, is an [Apache Lucene](https://lucene.apache.org/core/)
 
 Key phrases assigned to documents are semantic metadata of the documents and could be described as a very short version of its summary. You can, therefore, grasp the outline of a document by going through the list of key phrases, which are metadata of document, even when you don't have time to read the whole document. Let's say you are doing a research and have limited time. There are a pile of related documents in front of you but you don't have enough time to go through everything. In such case, you can view key phrases assigned to documents first and start reading only the documents that seem relevant to your research. 
 
-Many academic papers have key phrases assigned by their authors. Most of general documents and books, however, do not have key phrases assigned. KEA is a program to automatically extracts key phrases from such documents. KEA is a machine learning program "with a teacher" that reads in documents that have key phrases assigned by their authors and learns the characteristics of them so that it can automatically extract key phrases from unknown documents. KEA is an algorithm that works independent of language (English, Japanese, etc.).
+Many academic papers have key phrases assigned by their authors. Most of general documents and books, however, do not have key phrases assigned. KEA is a program to automatically extracts key phrases from such documents. KEA is a supervised machine learning program that reads in documents that have key phrases assigned by their authors and learns the features of them so that it can automatically extract key phrases from unknown documents. KEA is an algorithm that works independent of language (English, Japanese, etc.).
 
-## Relationship between Key Phrases Extraction and Information Search
+## Relationship between Key Phrases Extraction and Information Retrieval
 
-Now I should mention the relationship between key phrase extraction and information search as this article is about extracting key phrases from Lucene index.
+Now I should mention the relationship between key phrase extraction and information retrieval as this article is about extracting key phrases from Lucene index.
 
 First, we should note that the authors of KEA use key phrases instead of keywords. Keyword usually reminds me of an important (key) word. The authors, however, use phrase (two or more words) instead of word to emphasize that the program is able to extract not only one but two or more words from a document.
 
-What good things would happen to information search if you could extract key phrases from Lucene index? The first thing comes to my mind is query suggestion (or "auto-complete"). Lucene index by any means manages character strings by words and suggestions are made by words as well. However, continuous multiple words could be suggested at once and the value would increase more if you can automatically extract key phrases. The same applies to "Did you mean" search.
+What good things would happen to information retrieval if you could extract key phrases from Lucene index? The first thing comes to my mind is query suggestion (or "auto-complete"). Lucene index by any means manages character strings by words and suggestions are made by words as well. However, continuous multiple words could be suggested at once and the value would increase more if you can automatically extract key phrases. The same applies to "Did you mean" search.
 
 It also helps users easily select documents by displaying the key phrases of documents in place of or along side of the highlight function while displaying search results. In addition, being able to extract key phrases can be a big advantage as they can be keys for facet.
 
@@ -45,7 +45,7 @@ then, KEA enumerates the following 10 key phrase candidates.
 * like to go
 * go to yugawara
 
-During key phrase candidate enumeration, phrases starting with stop word or ending with stop word will not be candidates. Therefore, independent "to", "like(s) to", or "to go" will not be listed as candidates. Also, normalization of character or word that is often performed in information search and NLP is done during this step. So, Tokyo and Yugawara become "tokyo" and "yugawara" while "likes" is stemmed to become "like".
+During key phrase candidate enumeration, phrases starting with stop word or ending with stop word will not be candidates. Therefore, independent "to", "like(s) to", or "to go" will not be listed as candidates. Also, normalization of character or word that is often performed in information retrieval and NLP is done during this step. So, Tokyo and Yugawara become "tokyo" and "yugawara" while "likes" is stemmed to become "like".
 
 ### Model Learning in KEA
 
@@ -365,7 +365,7 @@ Root crops
 Vegetables
 ```
 
-Pretty reasonable phrases are extracted here as well. It is precise enough for something like keyword suggestion for information search.
+Pretty reasonable phrases are extracted here as well. It is precise enough for something like keyword suggestion for information retrieval.
 
 # Summary
 
