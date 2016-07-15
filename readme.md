@@ -88,7 +88,7 @@ Now, you might think why you use Lucene to implement KEA. Not only KEA, when you
 
 ### Analyzer
 
-Lucene uses the [Analyzer](https://lucene.apache.org/core/6_1_0/core/org/apache/lucene/analysis/Analyzer.html) class to separate a document into words. KEA-lucene uses the [StandardTokenizer](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/standard/StandardTokenizer.html) for tokenization, the [LowerCaseFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/core/LowerCaseFilter.html) for the normalization to lower case letters, and the [ShingleFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/shingle/ShingleFilter.html) for word N-gram support. Unfortunately, the concept of stop word in KEA cannot be realized by Lucene's [StopFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/core/StopFilter.html). I, therefore, implemented an original [TokenFilter](https://lucene.apache.org/core/6_1_0/core/org/apache/lucene/analysis/TokenFilter.html) called KEAStopFilter. Finally, KEAAnalyzer was constructed as follows.
+Lucene uses the [Analyzer](https://lucene.apache.org/core/6_1_0/core/org/apache/lucene/analysis/Analyzer.html) class to tokenize a document into words. KEA-lucene uses the [StandardTokenizer](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/standard/StandardTokenizer.html) for tokenization, the [LowerCaseFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/core/LowerCaseFilter.html) for the normalization to lower case letters, and the [ShingleFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/shingle/ShingleFilter.html) for word N-gram support. Unfortunately, the concept of stop word in KEA cannot be realized by Lucene's [StopFilter](https://lucene.apache.org/core/6_1_0/analyzers-common/org/apache/lucene/analysis/core/StopFilter.html). I, therefore, implemented an original [TokenFilter](https://lucene.apache.org/core/6_1_0/core/org/apache/lucene/analysis/TokenFilter.html) called KEAStopFilter. Finally, KEAAnalyzer was constructed as follows.
 
 ```java
 public class KEAAnalyzer extends Analyzer {
@@ -160,7 +160,7 @@ You also need a position information to calculate a distance of phrase. This can
 
 ## Model Learning (Model File Output) 
 
-KEAModelBuilder performs model learning in KEA-lucene. Note that this program [download here](https://github.com/snkim/AutomaticKeyphraseExtraction) assumes that the resulting teacher data (expand MAUI.tar.gz and then expand fao30.tar.gz there) will be located in the data/fao30/ directory.
+KEAModelBuilder performs model learning in KEA-lucene. Note that this program [download here](https://github.com/snkim/AutomaticKeyphraseExtraction) assumes that the resulting supervised data (expand MAUI.tar.gz and then expand fao30.tar.gz there) will be located in the data/fao30/ directory.
 
 For learning, you first count variable statistics before dividing statistics because KEA uses Naive Bayes for model learning. The division is performed by the following KeyphraseExtractor(2) program and the KEAModelBuilder program only calculates statistics. To be exact, it is not learning model but is only outputting a model file.
 
@@ -182,9 +182,9 @@ $ head features-model.txt
 
 One record represents one key phrase candidate. The first numeric values represents TF*IDF, the second one represents the distance, and the third column is a class to specify whether it is key phrases (true) or not (false).
 
-The KEAModelBuilder program creates Lucene index from teacher data, consider Lucene index as word dictionary, iterate the process and calculate feature value to output the above model file.
+The KEAModelBuilder program creates Lucene index from supervised data, consider Lucene index as word dictionary, iterate the process and calculate feature value to output the above model file.
 
-For your information, here's the processing time. My MacBook Pro (Processor: Intel Core i7／2.3 GHz) took about 5 minutes to process. While creating Lucene index was done in a fraction of a second, outputting a model file while scanning Lucene index took more time to complete.
+For your information, here's the processing time. My MacBook Pro (Processor: Intel Core i7/2.3 GHz) took about 5 minutes to process. While creating Lucene index was done in a fraction of a second, outputting a model file while scanning Lucene index took more time to complete.
 
 ## Discretization of Continuous Values using R
 
@@ -212,9 +212,9 @@ MDLP calculation using R took me about 30 minutes in the same environment.
 
 ## Extracting key phrases from Lucene Index
 
-Now, let's extract key phrases from Lucene index. There are two programs: KeyphraseExtractor and KeyphraseExtractor2. The former is an index created by KEAModelBuilder that extracts key phrases from a known file called filea0011e00.txt (this file name is hard-coded in the program) as a test. KeyphraseExtractor2, meanwhile, is a program that extracts key phrases from unknown file called document t0073e.txt in fao780 (you can expand MAUI.tar.gz above to obtain this file).
+Now, let's extract key phrases from Lucene index. There are two programs: KeyphraseExtractor and KeyphraseExtractor2. The former is an index created by KEAModelBuilder that extracts key phrases from a known file called file a0011e00.txt (this file name is hard-coded in the program) as a test. KeyphraseExtractor2, meanwhile, is a program that extracts key phrases from unknown file called document t0073e.txt in fao780 (you can untar MAUI.tar.gz above to obtain this file).
 
-KeyphraseExtractor obtains statistics from existing Lucene index, while KeyphraseExtractor2 starts from creating Lucene index in order to obtain variable statistics from a new document. Also, KeyphraseExtractor2 is a new document that is not included in a model and, because of that, is different where 1 is added to the both denominator and numerator in the df(P) / N portion.
+KeyphraseExtractor obtains statistics from existing Lucene index, while KeyphraseExtractor2 starts from creating Lucene index in order to obtain variable statistics from a new document. Also, because KeyphraseExtractor2 treats a new document that is not included in a model, it is different from KeyphraseExtractor where 1 is added to the both denominator and numerator in the df(P) / N portion.
 
 The both KeyphraseExtractor and KeyphraseExtractor2 specify a document that is already registered in Lucene index and calculate scores while listing key phrase candidates in the document. Therefore, you want to use TermVector of Lucene instead of iterating word dictionaries. Here, Lucene's add document function calls setStoreTermVectors(true) of FieldType.
 
