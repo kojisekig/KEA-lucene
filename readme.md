@@ -369,7 +369,7 @@ Pretty reasonable phrases are extracted here as well. It is precise enough for s
 
 # Summary
 
-In this article, I particularly chose Lucene library to implement KEA with teacher machine learning for key phrases extraction. Since the KEA program has a simple and clear algorithm, I believe you can easily understand - from the program - how to use Lucene API to obtain variable statistics of key phrase candidates.
+In this article, I particularly chose Lucene library to implement KEA with supervised machine learning for key phrases extraction. Since the KEA program has a simple and clear algorithm, I believe you can easily understand - from the program - how to use Lucene API to obtain variable statistics of key phrase candidates.
 
 I'd be happy to see readers find interest in the Lucene library or expand their knowledge on the library through this article.
 
@@ -379,7 +379,7 @@ When I wrote this article, I did not implement the following items in the first 
 
 * Stemming. Should be able to use tools including Lucene Porter Stemmer.
 * MDLP. R is used as described in the article. Like to be able to create an original or use non-GPL license implementation because the MDLP implement of R is GPL
-* Try against non-Japanese data including text in English. Teacher data and tweak around stop words would be necessary.
+* Try against non-Japanese data including text in English. Supervised data and tweak around stop words would be necessary.
 * Additional feature value. In addition to the above-mentioned feature values, the most recent KEA implement seems to have feature values that are not mentioned in the paper.
 
 We have been working on hard-coding around KEA-lucene and are planning to provide general purpose codes via [NLP4L](https://github.com/NLP4L) as appropriate.
