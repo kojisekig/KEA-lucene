@@ -54,7 +54,7 @@ KEA uses Naive Bayes classifier to learn how easy (P[yes]) or how difficult (P[n
 > P[yes] = Y / (Y + N) * Pt[t|yes] * Pd[d|yes]  
 > P[no] = N / (Y + N) * Pt[t|no] * Pd[d|no]
 
-Here, portions "Y / (Y + N)" and "N / (Y + N)" are prior probabilities determined by key phrase candidates. If the ones with asterisks are key phrases, then the prior probabilities would become as follows.
+Here, portions "Y / (Y + N)" and "N / (Y + N)" are prior probabilities determined by key phrase candidates. If the ones with asterisks in the previous sentence are key phrases, then the prior probabilities would become as follows.
 
 > Y / (Y + N) = 2 / 10  
 > N / (Y + N) = 8 / 10
@@ -63,11 +63,11 @@ KEA uses 2 feature values to express phrase P in document D. The first is TF*IDF
 
 > TF*IDF = freq(P,D) / size(D) * (-log(df(P) / N))
 
-freq(P,D) is the number of times phrase P appears in document D, size(D) is the number of words in document, df(P) is the number of documents that include phrase P, and N is the total number of documents. We use 2 for the base of log.
+freq(P,D) is the number of times phrase P appears in document D, size(D) is the number of words in document, df(P) is the number of documents that include phrase P, and N is the total number of documents. We use 2 for the base of logarithm.
 
 The second feature value is called "first occurrence" (Otherwise known as "distance"). This is determined by dividing the position of first occurrence of phrase P in document D by size(D). For example, "tokyo" is 1/7 while "governor" is 2/7 in the previous example.
 
-While the 2 feature values are positive real numbers, KEA discretizes continuous values and calculates posterior probability for each discrete value. The above formula Pt[t|yes] (or Pt[t|no]) is the posterior probability of TF*IDF while Pd[d|yes] (or Pd[d|no]) is the posterior probability of distance.
+While the 2 feature values are positive real numbers, KEA discretizes continuous values and calculates posterior probability for each discrete value. The above formula Pt[t|yes] \(or Pt[t|no]\) is the posterior probability of TF*IDF while Pd[d|yes] \(or Pd[d|no]\) is the posterior probability of distance.
 
 ### Key Phrase Extraction in KEA
 
